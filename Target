@@ -1,0 +1,27 @@
+using UnityEngine;
+
+public class Target : MonoBehaviour
+{
+    [SerializeField] private float _speedRotation;
+
+    private SpawnerKnifes _spawnerKnifes;
+    private void Start()
+    {
+        _spawnerKnifes = SpawnerKnifes.instance;
+    }
+    private void FixedUpdate()
+    {
+        transform.Rotate(Vector3.forward * _speedRotation);
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        GameObject kinfeObject;
+
+        if (collision.gameObject.GetComponent<Knife>())
+        {
+            _spawnerKnifes.AddScore();
+            kinfeObject = collision.gameObject;
+            kinfeObject.transform.SetParent(transform);
+        }
+    }
+}
