@@ -1,0 +1,53 @@
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class SpawnerKnifes : MonoBehaviour
+{
+    public static SpawnerKnifes instance;
+    [SerializeField] private Knife _knife;
+
+    [SerializeField] private GameObject _gameOverPanel;
+
+    [SerializeField] private Vector2 _spawnKnifePosition;
+
+    [SerializeField] private int _score;
+    [SerializeField] private Text _scoreText;
+    [SerializeField] private Text _loseText;
+
+    private Knife _pastKnife;
+    private bool _onGameOver;
+    public bool onGameOver => _onGameOver;
+
+    private void Start()
+    {
+        instance = this;
+        _gameOverPanel.SetActive(false);
+        _onGameOver = false;
+    }
+    private void FixedUpdate()
+    {
+        if (_pastKnife == null || _pastKnife.GetOnShoot() == true)
+        {
+            _pastKnife = Instantiate(_knife, _spawnKnifePosition, Quaternion.identity);
+        }
+    }
+
+    public void GameOver()
+    {
+        _onGameOver = true;
+        _gameOverPanel.SetActive(true);
+        _loseText.text = "Вы проиграли, ваш счёт: " + _score;
+    }
+
+    public void AddScore()
+    {
+        _score++;
+        _scoreText.text = _score.ToString();
+    }
+
+    public void ExitMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+}
